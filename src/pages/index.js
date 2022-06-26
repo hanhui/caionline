@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { Box, Container, Grid } from '@mui/material';
 import { Budget } from '../components/dashboard/budget';
@@ -9,12 +10,28 @@ import { TotalCustomers } from '../components/dashboard/total-customers';
 import { TotalProfit } from '../components/dashboard/total-profit';
 import { TrafficByDevice } from '../components/dashboard/traffic-by-device';
 import { DashboardLayout } from '../components/dashboard-layout';
+import { useQuery } from 'react-query'
 
+import Router from 'next/router'
 import useUser from '../lib/useUser';
-const Dashboard = () => {  
-  const { user,mutateUser } = useUser({
-    redirectTo: '/login',
+const Dashboard = () => {
+  // const { user,mutateUser } = useUser({
+  //   redirectTo: '/login',
+  // })
+  const {
+    isLoading,
+    isFetching,
+    isError,
+    data
+  } = useQuery(['/api/user'], async ({ queryKey }) => {
+    let res = await fetch(queryKey)
+    let data = await res.json()
+    return data
   })
+
+  useEffect(() => {
+    if (!isFetching && data && !data.isLoggedIn) { Router.push('/login'); }
+  }, [data, isFetching]);
   return (
     <>
       <Head>
