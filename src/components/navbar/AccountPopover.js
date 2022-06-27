@@ -1,11 +1,12 @@
-import { useRef, useState } from 'react';
+import { useRef, useState,useEffect } from 'react';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
 // components
 import MenuPopover from './MenuPopover';
-import useUser from '../../lib/useUser';
 
+import Router from 'next/router'
 import { useRouter } from 'next/router'
+import { useQuery } from 'react-query'
 
 import fetchJson, { FetchError } from '../../lib/fetchJson'
 // ----------------------------------------------------------------------
@@ -31,13 +32,25 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-
   const router = useRouter();
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(null);
-  const {user, mutateUser } = useUser({
-    redirectTo: '/login',
+  const {
+    isLoading,
+    isFetching,
+    isError,
+    data
+  } = useQuery(['/api/user'], async ({ queryKey }) => {
+    let res = await fetch(queryKey)
+    let data = await res.json()
+    return data
   })
+  
+  useEffect(() => {
+    if (!isFetching && data && !data.isLoggedIn) { Router.push('/login'); }
+  }, [data, isFetching]);
+
+
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -51,14 +64,12 @@ export default function AccountPopover() {
   }
   const handleLogout = async () => {
     setOpen(null);
-    try {
-      mutateUser(
-        await fetchJson('/api/logout', {
+    try {      
+        fetchJson('/api/logout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({}),
-        })
-      )
+        }).then(rtn=>{})
     } catch (error) {
       if (error instanceof FetchError) {
         setErrorMsg(error.data.message)
@@ -66,7 +77,7 @@ export default function AccountPopover() {
         console.error('An unexpected error happened:', error)
       }
     }
-    router.push('/');
+    router.replace('/login');
   }
   return (
     <>
@@ -88,7 +99,8 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={user?.avatarUrl} alt="photoURL" />
+        <Avatar src={data?.avatarUrl}
+          alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -106,11 +118,14 @@ export default function AccountPopover() {
         }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {user?.login}
+          <Typography variant="subtitle2"
+            noWrap>
+            {data?.login}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
+          <Typography variant="body2"
+            sx={{ color: 'text.secondary' }}
+            noWrap>
+            {data?.email}
           </Typography>
         </Box>
 
@@ -118,7 +133,9 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} to={option.linkTo} onClick={() => handleMenuItem(option.linkTo)}>
+            <MenuItem key={option.label}
+              to={option.linkTo}
+              onClick={() => handleMenuItem(option.linkTo)}>
               {option.label}
             </MenuItem>
           ))}
@@ -126,7 +143,8 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout}
+          sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

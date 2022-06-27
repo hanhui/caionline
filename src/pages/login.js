@@ -1,19 +1,31 @@
+
+import { useEffect } from 'react';
+import { useQuery } from 'react-query'
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import fetchJson, { FetchError } from '../lib/fetchJson'
-import useUser from '../lib/useUser'
 const Login = () => {
-  const { mutateUser } = useUser({
-    redirectTo: '/',
-    redirectIfFound: true,
+  const {
+    isLoading,
+    isFetching,
+    isError,
+    data
+  } = useQuery(['/api/user'], async ({ queryKey }) => {
+    let res = await fetch(queryKey)
+    let data = await res.json()
+    return data
   })
-  const router = useRouter();
+
+  useEffect(() => {
+    if (!isFetching && data && data.isLoggedIn) { Router.replace('/'); }
+  }, [data, isFetching]);
+
   const formik = useFormik({
     initialValues: {
       email: 'demo@devias.io',
@@ -34,23 +46,16 @@ const Login = () => {
           'Password is required')
     }),
     onSubmit: async (values) => {
-      console.log(values);
       try {
-        mutateUser(
-          await fetchJson('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-          })
-        )
+        await fetchJson('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values),
+        })
       } catch (error) {
-        if (error instanceof FetchError) {
-          setErrorMsg(error.data.message)
-        } else {
-          console.error('An unexpected error happened:', error)
-        }
+        console.error('An unexpected error happened:', error);
       }
-      router.push('/');
+      Router.push('/');
     }
   });
 
@@ -89,7 +94,7 @@ const Login = () => {
                 Sign in
               </Typography>
             </Box>
-           
+
             <TextField
               error={Boolean(formik.touched.email && formik.errors.email)}
               fullWidth

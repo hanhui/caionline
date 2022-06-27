@@ -1,8 +1,12 @@
+import { useState,useEffect } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+
+import Router from 'next/router'
+import { useQuery } from 'react-query'
 import {
   Box,
   Button,
@@ -18,10 +22,21 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import fetchJson, { FetchError } from '../lib/fetchJson'
 import useUser from '../lib/useUser'
 const Register = () => {
-  const { mutateUser } = useUser({
-    redirectTo: '/',
-    redirectIfFound: true,
+  const {
+    isLoading,
+    isFetching,
+    isError,
+    data
+  } = useQuery(['/api/user'], async ({ queryKey }) => {
+    let res = await fetch(queryKey)
+    let data = await res.json()
+    return data
   })
+
+  useEffect(() => {
+    if (!isFetching && data && data.isLoggedIn) { Router.push('/'); }
+  }, [data, isFetching]);
+
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -63,13 +78,11 @@ const Register = () => {
     }),
     onSubmit: async (values) => {
       try {
-        mutateUser(
           await fetchJson('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values),
           })
-        )
       } catch (error) {
         if (error instanceof FetchError) {
           setErrorMsg(error.data.message)

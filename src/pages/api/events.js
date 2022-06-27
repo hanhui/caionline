@@ -1,12 +1,11 @@
 import { withIronSessionApiRoute } from 'iron-session/next'
-import { sessionOptions } from '../../lib/session'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { ironOptions } from '../../lib/session'
 import  serviceKit from '../../services/serviceKit'
 
 
-export default withIronSessionApiRoute(eventsRoute, sessionOptions)
+export default withIronSessionApiRoute(eventsRoute, ironOptions)
 
-async function eventsRoute(req: NextApiRequest, res: NextApiResponse) {
+async function eventsRoute(req, res) {
   const user = req.session.user
 
   if (!user || user.isLoggedIn === false) {

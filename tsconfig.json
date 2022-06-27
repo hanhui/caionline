@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/lib/session.js"  ],
+, "src/lib/session.js", "src/lib/useEvents.js", "src/lib/useUser.js", "src/lib/fetchJson.ts", "src/pages/api/events.js", "src/pages/api/login.js", "src/pages/api/logout.js", "src/pages/api/register.js", "src/pages/api/user.js"  ],
   "exclude": [
     "node_modules"
   ]

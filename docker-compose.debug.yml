@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  materialkitreact:
-    image: materialkitreact
+  caionline:
+    image: caionline
     build:
       context: .
       dockerfile: ./Dockerfile
