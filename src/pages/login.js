@@ -9,23 +9,9 @@ import * as Yup from 'yup';
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
+import { axios } from '../helpers/axiosKit'
 import fetchJson, { FetchError } from '../lib/fetchJson'
 const Login = () => {
-  const {
-    isLoading,
-    isFetching,
-    isError,
-    data
-  } = useQuery(['/api/user'], async ({ queryKey }) => {
-    let res = await fetch(queryKey)
-    let data = await res.json()
-    return data
-  })
-
-  useEffect(() => {
-    if (!isFetching && data && data.isLoggedIn) { Router.replace('/'); }
-  }, [data, isFetching]);
-
   const formik = useFormik({
     initialValues: {
       email: 'demo@devias.io',
@@ -47,15 +33,23 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
-        await fetchJson('/api/login', {
+        let sign = await fetchJson('/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(values),
         })
+        console.log('signclient=', sign)
+        if (sign.token && sign.isLoggedIn) {
+          axios.defaults.headers.common['Authorization'] = sign.token;
+          Router.push('/');
+        }
+        else {
+          delete axios.defaults.headers.common['Authorization'];
+          alert('请检查账号信息是否正确！')
+        }
       } catch (error) {
         console.error('An unexpected error happened:', error);
       }
-      Router.push('/');
     }
   });
 

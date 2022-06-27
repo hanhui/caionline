@@ -10,9 +10,9 @@ async function registerRoute(req, res) {
   try {
     let rtn = await serviceKit.signServices.register({ email, password, firstName, lastName })
     console.log('serviceKit.signServices.register',rtn)
-    const user = { isLoggedIn: true, login: `${firstName} ${lastName}`, email: email, avatarUrl: '/static/images/avatars/avatar_7.png' }
-    req.session.user = user
-    await req.session.save()
+    const user = { isLoggedIn: false, login: `${firstName} ${lastName}`, email: email, avatarUrl: '/static/images/avatars/avatar_7.png' }
+    //req.session.user = user
+    //await req.session.save()
     res.json(user)
   } catch (error) {
     console.log(error);

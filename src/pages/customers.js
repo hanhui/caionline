@@ -4,30 +4,39 @@ import { CustomerListResults } from '../components/customer/customer-list-result
 import { CustomerListToolbar } from '../components/customer/customer-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
-
-const Customers = () => (
-  <>
-    <Head>
-      <title>
-        Customers | Material Kit
-      </title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8
-      }}
-    >
-      <Container maxWidth={false}>
-        <CustomerListToolbar />
-        <Box sx={{ mt: 3 }}>
-          <CustomerListResults customers={customers} />
-        </Box>
-      </Container>
-    </Box>
-  </>
-);
+import * as serviceKit from '../services'
+import { useQuery } from 'react-query'
+const Customers = () => {
+  const {
+    isLoading,
+    isFetching,
+    isError,
+    data
+  } = useQuery(['serviceKit.customerServices.getAllUseQuery', {}], serviceKit.customerServices.getAllUseQuery)
+  return (
+    <>
+      <Head>
+        <title>
+          Customers | Material Kit
+        </title>
+      </Head>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8
+        }}
+      >
+        <Container maxWidth={false}>
+          <CustomerListToolbar />
+          <Box sx={{ mt: 3 }}>
+            <CustomerListResults customers={!isFetching ? data?.data ? data.data : [] : []} />
+          </Box>
+        </Container>
+      </Box>
+    </>
+  );
+}
 Customers.getLayout = (page) => (
   <DashboardLayout>
     {page}

@@ -105,23 +105,9 @@ export const DashboardSidebar = (props) => {
                   variant="subtitle1"
                 >
                   线上教学辅助
-                </Typography>
-                <Typography
-                  color="neutral.400"
-                  variant="body2"
-                >
-                  Your tier
-                  {' '}
-                  : Premium
-                </Typography>
+                </Typography>                
               </div>
-              <SelectorIcon
-                sx={{
-                  color: 'neutral.500',
-                  width: 14,
-                  height: 14
-                }}
-              />
+             
             </Box>
           </Box>
         </div>

@@ -7,10 +7,12 @@ axios.defaults.baseURL = "http://localhost:3006/";
  */
 axios.interceptors.request.use(
     (config) => {
-         config.body = JSON.stringify(config.data);
+        config.body = JSON.stringify(config.data);
         // config.headers = {
         //     "Content-Type": "application/json",
-        // };
+        // };        
+           // config.headers.token = 'xxxxxxxxxxxxxxxxxxxxxxx';
+        // }
         return config;
     },
     (error) => {
@@ -61,7 +63,7 @@ export function get(url, params = {}) {
  */
 
 export function post(url, data) {
-    console.log('post data',data)
+    console.log('post data', data)
     return new Promise((resolve, reject) => {
         axios.post(url, data).then(
             (response) => {
@@ -134,7 +136,6 @@ export default function axiosKit(fecth, url, param) {
     return new Promise((resolve, reject) => {
         switch (fecth) {
             case "get":
-                console.log("begin a get request,and url:", url);
                 get(url, param)
                     .then(function (response) {
                         resolve(response);
@@ -145,7 +146,6 @@ export default function axiosKit(fecth, url, param) {
                     });
                 break;
             case "post":
-                console.log("begin a post request,and url:", url, param);
                 post(url, param)
                     .then(function (response) {
                         resolve(response);
@@ -249,7 +249,7 @@ function msag(err) {
  * @param data
  */
 function landing(url, params, data) {
-    console.log('完成检查')
     if (data.code === -1) {
     }
 }
+export { axios }

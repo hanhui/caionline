@@ -6,7 +6,7 @@ export const login = (params) => {
 }
 
 export const loginUseQuery = ({ queryKey }) => {
-    return axiosKit("get", "api/sign/login", queryKey[0]);
+    return axiosKit("get", "api/sign/login", queryKey[1]);
 }
 export const register = (params) => {
     console.log(params)
@@ -14,7 +14,7 @@ export const register = (params) => {
 }
 
 export const registerUseQuery = ({ queryKey }) => {
-    return axiosKit("post", "api/sign/register", queryKey[0]);
+    return axiosKit("post", "api/sign/register", queryKey[1]);
 }
 
 

@@ -1,9 +1,13 @@
-import { useRef, useState,useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
+import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, ListItemIcon, ListItemText } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import HomeSharpIcon from '@mui/icons-material/HomeSharp';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 // components
 import MenuPopover from './MenuPopover';
 
+import { axios } from '../../helpers/axiosKit'
 import Router from 'next/router'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
@@ -45,7 +49,7 @@ export default function AccountPopover() {
     let data = await res.json()
     return data
   })
-  
+
   useEffect(() => {
     if (!isFetching && data && !data.isLoggedIn) { Router.push('/login'); }
   }, [data, isFetching]);
@@ -64,12 +68,14 @@ export default function AccountPopover() {
   }
   const handleLogout = async () => {
     setOpen(null);
-    try {      
-        fetchJson('/api/logout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({}),
-        }).then(rtn=>{})
+    try {
+      fetchJson('/api/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      }).then(rtn => {
+        delete axios.defaults.headers.common['Authorization'];
+      })
     } catch (error) {
       if (error instanceof FetchError) {
         setErrorMsg(error.data.message)
@@ -135,6 +141,7 @@ export default function AccountPopover() {
           {MENU_OPTIONS.map((option) => (
             <MenuItem key={option.label}
               to={option.linkTo}
+              icon={option.icon}
               onClick={() => handleMenuItem(option.linkTo)}>
               {option.label}
             </MenuItem>
@@ -145,7 +152,12 @@ export default function AccountPopover() {
 
         <MenuItem onClick={handleLogout}
           sx={{ m: 1 }}>
-          Logout
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Logout
+          </ListItemText>
         </MenuItem>
       </MenuPopover>
     </>
