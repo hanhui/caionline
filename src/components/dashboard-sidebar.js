@@ -23,6 +23,16 @@ const items = [
     title: 'Dashboard'
   },
   {
+    href: '/productDemo',
+    icon: (<UsersIcon fontSize="small" />),
+    title: '商品管理演示'
+  },
+  {
+    href: '/courses',
+    icon: (<UsersIcon fontSize="small" />),
+    title: '课程管理'
+  },
+  {
     href: '/customers',
     icon: (<UsersIcon fontSize="small" />),
     title: 'Customers'
