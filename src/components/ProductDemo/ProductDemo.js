@@ -14,7 +14,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
-import {PIC_BASEURL} from '../../helpers/picUrl'
+import { PIC_BASEURL } from '../../helpers/picUrl'
 
 import * as serviceKit from '../../services'
 import { useQuery } from 'react-query'
@@ -193,7 +193,10 @@ function ProductDemo() {
     }
 
     const imageBodyTemplate = (rowData) => {
-        return <img src={`${PIC_BASEURL}${rowData.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={rowData.image} className="w-7rem shadow-2" />
+        return <img src={`${PIC_BASEURL}${rowData.image}`}
+            onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'}
+            alt={rowData.image}
+            className="w-7rem shadow-2" />
     }
 
     const priceBodyTemplate = (rowData) => {
@@ -201,7 +204,8 @@ function ProductDemo() {
     }
 
     const ratingBodyTemplate = (rowData) => {
-        return <Rating value={rowData.rating} readOnly cancel={false} />;
+        return <Rating value={rowData.rating}
+            readOnly cancel={false} />;
     }
 
     const statusBodyTemplate = (rowData) => {
@@ -211,8 +215,12 @@ function ProductDemo() {
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-danger" onClick={() => confirmDeleteProduct(rowData)} />
+                <Button icon="pi pi-pencil"
+                    className="p-button-rounded p-button-success mr-2"
+                    onClick={() => editProduct(rowData)} />
+                <Button icon="pi pi-trash"
+                    className="p-button-rounded p-button-danger"
+                    onClick={() => confirmDeleteProduct(rowData)} />
             </React.Fragment>
         );
     }
@@ -229,34 +237,71 @@ function ProductDemo() {
         <div className="flex flex-column md:flex-row md:align-items-center justify-content-between">
             <span className="p-input-icon-left w-full md:w-auto">
                 <i className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." className="w-full lg:w-auto" />
+                <InputText type="search"
+                    onInput={(e) => setGlobalFilter(e.target.value)}
+                    placeholder="Search..."
+                    className="w-full lg:w-auto" />
             </span>
             <div className="mt-3 md:mt-0 flex justify-content-end">
-                <Button icon="pi pi-plus" className="mr-2 p-button-rounded" onClick={openNew} tooltip="New" tooltipOptions={{ position: 'bottom' }} />
-                <Button icon="pi pi-trash" className="p-button-danger mr-2 p-button-rounded" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} tooltip="Delete" tooltipOptions={{ position: 'bottom' }} />
-                <Button icon="pi pi-upload" className="p-button-help p-button-rounded mr-2" onClick={exportCSV} tooltip="Export" tooltipOptions={{ position: 'bottom' }} />
-                <Button icon="pi pi-save" className=" p-button-rounded" onClick={() => { saveToDb(); }} tooltip="Save" tooltipOptions={{ position: 'bottom' }} />
+                <Button icon="pi pi-plus"
+                    className="mr-2 p-button-rounded"
+                    onClick={openNew}
+                    tooltip="New"
+                    tooltipOptions={{ position: 'bottom' }} />
+                <Button icon="pi pi-trash"
+                    className="p-button-danger mr-2 p-button-rounded"
+                    onClick={confirmDeleteSelected}
+                    disabled={!selectedProducts || !selectedProducts.length}
+                    tooltip="Delete"
+                    tooltipOptions={{ position: 'bottom' }} />
+                <Button icon="pi pi-upload"
+                    className="p-button-help p-button-rounded mr-2"
+                    onClick={exportCSV}
+                    tooltip="Export"
+                    tooltipOptions={{ position: 'bottom' }} />
+                <Button icon="pi pi-save"
+                    className=" p-button-rounded"
+                    onClick={() => { saveToDb(); }}
+                    tooltip="Save"
+                    tooltipOptions={{ position: 'bottom' }} />
             </div>
         </div>
     );
     const productDialogFooter = (
         <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" onClick={saveProduct} />
+            <Button label="Cancel"
+                icon="pi pi-times"
+                className="p-button-text"
+                onClick={hideDialog} />
+            <Button label="Save"
+                icon="pi pi-check"
+                onClick={saveProduct} />
         </React.Fragment>
     );
 
     const deleteProductDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteProduct} />
+            <Button label="No"
+                icon="pi pi-times"
+                className="p-button-text"
+                onClick={hideDeleteProductDialog} />
+            <Button label="Yes"
+                icon="pi pi-check"
+                className="p-button-text"
+                onClick={deleteProduct} />
         </React.Fragment>
     );
 
     const deleteProductsDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductsDialog} />
-            <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteSelectedProducts} />
+            <Button label="No"
+                icon="pi pi-times"
+                className="p-button-text"
+                onClick={hideDeleteProductsDialog} />
+            <Button label="Yes"
+                icon="pi pi-check"
+                className="p-button-text"
+                onClick={deleteSelectedProducts} />
         </React.Fragment>
     );
     const handleFileUpload = (e) => {
@@ -285,15 +330,37 @@ function ProductDemo() {
 
             <div className="text-3xl text-800 font-bold mb-4">商品管理</div>
 
-            <DataTable ref={dt} value={products} selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)}
-                dataKey="id" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+            <DataTable ref={dt}
+                value={products}
+                selection={selectedProducts}
+                onSelectionChange={(e) => setSelectedProducts(e.value)}
+                dataKey="id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
                 paginatorTemplate="首页 PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                globalFilter={globalFilter} header={header} responsiveLayout="scroll">
-                <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} exportable={false}></Column>
-                <Column field="code" header="Code" sortable style={{ minWidth: '12rem' }}></Column>
-                <Column field="name" header="Name" sortable style={{ minWidth: '16rem' }}></Column>
-                <Column field="image" header="Image" body={imageBodyTemplate}></Column>
+                globalFilter={globalFilter}
+                header={header}
+                responsiveLayout="scroll">
+                <Column selectionMode="multiple"
+                    headerStyle={{ width: '3rem' }} 
+                    exportable={false}>                        
+                    </Column>
+                <Column field="code" 
+                header="Code" 
+                sortable 
+                style={{ minWidth: '12rem' }}>
+                </Column>
+                <Column field="name" 
+                header="Name" 
+                sortable 
+                style={{ minWidth: '16rem' }}>                    
+                </Column>
+                <Column field="image" 
+                header="Image" 
+                body={imageBodyTemplate}>
+                </Column>
                 <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
                 <Column field="category" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
                 <Column field="rating" header="Reviews" body={ratingBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column>
