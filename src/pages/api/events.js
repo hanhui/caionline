@@ -1,6 +1,5 @@
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { ironOptions } from '../../lib/session'
-import  serviceKit from '../../services/serviceKit'
 
 
 export default withIronSessionApiRoute(eventsRoute, ironOptions)

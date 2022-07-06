@@ -6,7 +6,6 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createEmotionCache } from '../utils/create-emotion-cache';
 import { theme } from '../theme';
-import reportWebVitals from './reportWebVitals';
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { QueryClientProvider, QueryClient } from 'react-query'
 import { axios } from '../helpers/axiosKit'
@@ -44,7 +43,6 @@ const App = (props) => {
       </CacheProvider>
     </QueryClientProvider>
   );
-  reportWebVitals(console.log);
 };
 
 export default App;
